@@ -1,7 +1,7 @@
 // LICENCE https://github.com/adaptlearning/adapt_authoring/blob/master/LICENSE
 define(function(require) {
-  var Origin = require('coreJS/app/origin');
-  var ServerConfigView = require('./views/serverConfigView.js');
+  var Origin = require('core/origin');
+  var ServerConfigView = require('./views/serverConfigView');
 
   var TITLE = 'Server Config';
   var CLASSNAME = 'serverConfig';
@@ -10,7 +10,7 @@ define(function(require) {
     Origin.router.navigate('#/' + CLASSNAME, {trigger: true});
   });
 
-  Origin.on('app:dataReady login:changed', function() {
+  Origin.on('origin:dataReady login:changed', function() {
     var permissions = ["*/*:create","*/*:read","*/*:update","*/*:delete"];
     Origin.permissions.addRoute(CLASSNAME, permissions);
     if (Origin.permissions.hasPermissions(permissions)) {
@@ -26,6 +26,6 @@ define(function(require) {
   Origin.on('router:' + CLASSNAME, function(location, subLocation, action) {
     Origin.trigger('sidebar:views:remove');
     Origin.trigger('location:title:update', { title: TITLE });
-    Origin.router.createView(ServerConfigView);
+    Origin.contentPane.setView(ServerConfigView);
   });
 });
