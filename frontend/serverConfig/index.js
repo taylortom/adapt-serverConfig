@@ -7,7 +7,7 @@ define(function(require) {
   var CLASSNAME = 'serverConfig';
 
   Origin.on('globalMenu:' + CLASSNAME + ':open', function() {
-    Origin.router.navigate('#/' + CLASSNAME, {trigger: true});
+    Origin.router.navigateTo(CLASSNAME);
   });
 
   Origin.on('origin:dataReady login:changed', function() {
