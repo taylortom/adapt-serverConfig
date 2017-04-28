@@ -3,29 +3,27 @@ define(function(require) {
   var Origin = require('core/origin');
   var ServerConfigView = require('./views/serverConfigView');
 
-  var TITLE = 'Server Config';
   var CLASSNAME = 'serverConfig';
-
-  Origin.on('globalMenu:' + CLASSNAME + ':open', function() {
-    Origin.router.navigateTo(CLASSNAME);
-  });
+  var FEATURE_PERMISSIONS = ["*/*:create","*/*:read","*/*:update","*/*:delete"];
 
   Origin.on('origin:dataReady login:changed', function() {
-    var permissions = ["*/*:create","*/*:read","*/*:update","*/*:delete"];
-    Origin.permissions.addRoute(CLASSNAME, permissions);
-    if (Origin.permissions.hasPermissions(permissions)) {
-      Origin.globalMenu.addItem({
-        "location": "global",
-        "text": TITLE,
-        "icon": "fa-file-text ",
-        "callbackEvent": CLASSNAME + ":open"
+    Origin.permissions.addRoute(CLASSNAME, FEATURE_PERMISSIONS);
+  });
+
+  Origin.on('systemInfoSidebar:postRender', function(view) {
+    if (Origin.permissions.hasPermissions(FEATURE_PERMISSIONS)) {
+      Origin.trigger('systemInfoSidebar:addButton', {
+        name: CLASSNAME,
+        title: Origin.l10n.t('app.serverconfig'),
+        icon: 'fa-chevron-right',
+        event: CLASSNAME + ":open"
       });
     }
   });
 
-  Origin.on('router:' + CLASSNAME, function(location, subLocation, action) {
-    Origin.trigger('sidebar:views:remove');
-    Origin.trigger('location:title:update', { title: TITLE });
+  Origin.on(CLASSNAME + ':open', function() {
+    // bypass the router, as we're not treating these as different pages
+    Origin.trigger('location:title:update', { title: Origin.l10n.t('app.serverconfig') });
     Origin.contentPane.setView(ServerConfigView);
   });
 });
