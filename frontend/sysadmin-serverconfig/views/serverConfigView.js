@@ -2,11 +2,10 @@
 define(function(require){
   var Backbone = require('backbone');
   var Origin = require('core/origin');
-  var OriginView = require('core/views/originView');
+  var SysadminPluginView = require('plugins/sysadmin/views/sysadminPluginView');
 
-  var ServerLogView = OriginView.extend({
-    tagName: 'div',
-    className: 'serverConfig form-container-style',
+  var ServerConfigView = SysadminPluginView.extend({
+    name: 'serverConfig',
 
     preRender: function() {
       this.model = new Backbone.Model(Origin.constants);
@@ -15,9 +14,7 @@ define(function(require){
     postRender: function() {
       this.setViewToReady();
     }
-  }, {
-    template: 'serverConfig'
-  });
+  }, { template: 'serverConfig' });
 
-  return ServerLogView;
+  return ServerConfigView;
 });
